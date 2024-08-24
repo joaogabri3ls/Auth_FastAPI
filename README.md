@@ -129,10 +129,3 @@ Interactive API documentation is available at [Swagger UI](http://0.0.0.0:8000/d
 
 In the future, the API will be deployed to AWS. For details on AWS configuration and deployment, please refer to AWS-specific documentation.
 
-## Contributing
-
-If you would like to contribute to this project, please fork the repository and submit a pull request with your improvements.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
