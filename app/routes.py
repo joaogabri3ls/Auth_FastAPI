@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.depends import get_db_session, token_verifier
 from app.useCases import UserUseCases
-from app.schemas import User
+from app.schemas import User, UserLogin
 
 user_router = APIRouter(prefix='/user')
 test_router = APIRouter(prefix='/test ', dependencies=[Depends(token_verifier)])
@@ -30,12 +30,12 @@ def user_login(
     db_session: Session = Depends(get_db_session),
 ):
     uc = UserUseCases(db_session=db_session)
-    user = User(
+    user_login = UserLogin(
         username=request_form_user.username,
         password=request_form_user.password
     )
 
-    auth_data = uc.user_login(user=user)
+    auth_data = uc.user_login(user_login=user_login)
     return JSONResponse(
         content=auth_data,
         status_code=status.HTTP_200_OK
