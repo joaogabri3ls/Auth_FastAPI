@@ -2,56 +2,58 @@
 
 ## Description
 
-This project is a complete API for user management, including profile image manipulation. The API is built with FastAPI and uses SQLAlchemy, SQLModel, PostgreSQL, Alembic, and Docker to provide a robust and scalable solution.
+This project provides a complete API for user management with CRUD operations, including handling profile images. Built with FastAPI, SQLAlchemy, PostgreSQL, and Docker, it uses JWT for authentication.
 
 ## Technologies
 
-- **FastAPI**: A modern, fast (high-performance) web framework for building APIs.
-- **SQLAlchemy**: ORM for interacting with the PostgreSQL database.
-- **SQLModel**: ORM and Pydantic for easy model definition and data validation.
-- **PostgreSQL**: Relational database used to store API data.
-- **Alembic**: Database migration tool.
-- **Docker**: Containerization to simplify project execution.
-- **JWT (JSON Web Tokens)**: Used for authentication and authorization.
+- **FastAPI**: Web framework for building APIs with Python.
+- **SQLAlchemy**: ORM for PostgreSQL database interaction.
+- **PostgreSQL**: Relational database.
+- **Docker**: Containerization for deployment.
+- **JWT**: JSON Web Tokens for authentication.
 
 ## Installation and Setup
 
-### Docker Downloads
+### Docker Requirements
 
 - **Docker**: [Download Docker](https://www.docker.com/get-started)
 - **Docker Compose**: [Download Docker Compose](https://docs.docker.com/compose/install/)
 
-### Project Initialization with Docker
+### Building and Running the Project
 
-1. **Build the project**
+1. **Build the Docker images:**
 
     ```bash
     docker-compose build
     ```
 
-2. **Start the project**
+2. **Start the Docker containers:**
 
     ```bash
     docker-compose up
     ```
 
-    Docker will start the containers for the API and the database. The API will be available at `http://localhost:8000`.
+    The API will be available at `http://localhost:8000`.
 
 ## API Documentation
 
-Interactive API documentation is available at [Swagger UI](http://localhost:8000/docs) and can be used to explore and test the API endpoints.
+Interactive API documentation is available at [Swagger UI](http://localhost:8000/docs).
 
-## API Usage Examples
+## API Endpoints
 
 ### 1. Register a New User
 
 - **Method**: `POST`
 - **Route**: `/user/register`
 - **Description**: Registers a new user with a username, email, and password. The password will be hashed before being stored.
-- **Request Example**:
+- **Request Body Example**:
 
-    ```bash
-    curl -d '{"username":"john_doe", "email":"john@example.com", "password":"strongpassword123"}' -H "Content-Type: application/json" -X POST http://localhost:8000/user/register
+    ```json
+    {
+        "username": "john_doe",
+        "email": "john@example.com",
+        "password": "strongpassword123"
+    }
     ```
 
 - **Response**:
@@ -66,8 +68,8 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
 
 - **Method**: `POST`
 - **Route**: `/user/login`
-- **Description**: Authenticates a user by providing the username and password. Returns a JWT token if authentication is successful.
-- **Request Example**:
+- **Description**: Authenticates a user by providing a username and password. Returns a JWT token if authentication is successful.
+- **Request Form Example**:
 
     ```bash
     curl -d 'username=john_doe&password=strongpassword123' -H "Content-Type: application/x-www-form-urlencoded" -X POST http://localhost:8000/user/login
@@ -86,7 +88,7 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
 
 - **Method**: `GET`
 - **Route**: `/user/{user_id}`
-- **Description**: Retrieves details of a specific user by their ID.
+- **Description**: Retrieves details of a user by their ID.
 - **Request Example**:
 
     ```bash
@@ -100,6 +102,7 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
         "id": 1,
         "username": "john_doe",
         "email": "john@example.com",
+        "password": "hashedpassword",
         "imageURL": "https://s3.amazonaws.com/bucketname/imagename.jpg"
     }
     ```
@@ -108,11 +111,15 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
 
 - **Method**: `PUT`
 - **Route**: `/user/{user_id}`
-- **Description**: Updates details of a specific user by their ID.
-- **Request Example**:
+- **Description**: Updates details of a user by their ID.
+- **Request Body Example**:
 
-    ```bash
-    curl -d '{"username":"john_doe", "email":"john.doe@example.com", "password":"newpassword123"}' -H "Content-Type: application/json" -X PUT http://localhost:8000/user/1
+    ```json
+    {
+        "username": "john_doe",
+        "email": "john.doe@example.com",
+        "password": "newpassword123"
+    }
     ```
 
 - **Response**:
@@ -127,7 +134,7 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
 
 - **Method**: `DELETE`
 - **Route**: `/user/{user_id}`
-- **Description**: Deletes a specific user by their ID.
+- **Description**: Deletes a user by their ID.
 - **Request Example**:
 
     ```bash
@@ -142,129 +149,19 @@ Interactive API documentation is available at [Swagger UI](http://localhost:8000
     }
     ```
 
-### 6. Update User Profile Image
-
-- **Method**: `PUT`
-- **Route**: `/user/{user_id}/profile-image`
-- **Description**: Updates the profile image of the specified user.
-- **Request Example**:
-
-    ```bash
-    curl -F "file=@/path/to/image.jpg" -H "Authorization: Bearer <JWT_TOKEN>" -X PUT http://localhost:8000/user/1/profile-image
-    ```
-
-- **Response**:
-
-    ```json
-    {
-        "msg": "Profile image updated successfully"
-    }
-    ```
-
-## AWS Configuration
-
-In the future, the API will be deployed to AWS. For details on AWS configuration and deployment, please refer to AWS-specific documentation.
-
-## Contributing
-
-If you would like to contribute to this project, please fork the repository and submit a pull request with your improvements.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-    Docker will start the containers for the API and the database. The API will be available at `http://0.0.0.0:8000`.
-
-## API Documentation
-
-Interactive API documentation is available at [Swagger UI](http://0.0.0.0:8000/docs) and can be used to explore and test the API endpoints.
-
-## API Usage Examples
-
-### 1. Add a User
-
-- **Method**: `POST`
-- **Route**: `/user/register`
-- **Description**: Registers a new user with a username, email, and password. The password will be hashed before being stored.
-- **Request Example**:
-
-    ```bash
-    curl -d '{"username":"john_doe", "email":"john@example.com", "password":"strongpassword123"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:8000/user/register
-    ```
-
-- **Response**:
-
-    ```json
-    {
-        "msg": "success"
-    }
-    ```
-
-### 2. Get All Users
+### 6. Test Endpoint
 
 - **Method**: `GET`
-- **Route**: `/user/`
-- **Description**: Retrieves a list of all registered users.
-- **Request Example**:
-
-    ```bash
-    curl -X GET http://0.0.0.0:8000/user/
-    ```
-
+- **Route**: `/test`
+- **Description**: A simple test endpoint to verify that the API is working.
 - **Response**:
 
     ```json
-    [
-        {
-            "id": 1,
-            "username": "john_doe",
-            "email": "john@example.com",
-            "imageURL": "https://s3.amazonaws.com/bucketname/imagename.jpg"
-        }
-    ]
-    ```
-
-### 3. User Login
-
-- **Method**: `POST`
-- **Route**: `/user/login`
-- **Description**: Authenticates a user by providing the username and password. Returns a JWT token if authentication is successful.
-- **Request Example**:
-
-    ```bash
-    curl -d 'username=john_doe&password=strongpassword123' -H "Content-Type: application/x-www-form-urlencoded" -X POST http://0.0.0.0:8000/user/login
-    ```
-
-- **Response**:
-
-    ```json
-    {
-        "access_token": "<JWT_TOKEN>",
-        "token_type": "bearer"
-    }
-    ```
-
-### 4. Update User Profile Image
-
-- **Method**: `PUT`
-- **Route**: `/user/{user_id}/profile-image`
-- **Description**: Updates the profile image of the specified user.
-- **Request Example**:
-
-    ```bash
-    curl -F "file=@/path/to/image.jpg" -H "Authorization: Bearer <JWT_TOKEN>" -X PUT http://0.0.0.0:8000/user/1/profile-image
-    ```
-
-- **Response**:
-
-    ```json
-    {
-        "msg": "Profile image updated successfully"
-    }
+    "It works"
     ```
 
 ## AWS Configuration
 
-In the future, the API will be deployed to AWS. For details on AWS configuration and deployment, please refer to AWS-specific documentation.
+The API is planned to be deployed on AWS in the future. Documentation for AWS deployment will be provided separately.
+
 
