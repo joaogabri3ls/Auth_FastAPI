@@ -1,122 +1,123 @@
 # Simple API with FastAPI
 
-## Descrição
+## Description
 
-Este projeto é uma API completa para gerenciamento de usuários, incluindo manipulação de imagens de perfil. A API é construída com FastAPI e utiliza SQLAlchemy, SQLModel, PostgreSQL, Alembic, e Docker para fornecer uma solução robusta e escalável.
+This project is a complete API for user management, including profile image manipulation. The API is built with FastAPI and uses SQLAlchemy, SQLModel, PostgreSQL, Alembic, and Docker to provide a robust and scalable solution.
 
-## Tecnologias
+## Technologies
 
-- **FastAPI**: Framework web moderno para construir APIs de alto desempenho.
-- **SQLAlchemy**: ORM para interagir com o banco de dados PostgreSQL.
-- **SQLModel**: ORM e Pydantic para fácil definição de modelos e validação de dados.
-- **PostgreSQL**: Banco de dados relacional usado para armazenar dados da API.
-- **Alembic**: Ferramenta para migrações de banco de dados.
-- **Docker**: Containerização para simplificar a execução do projeto.
-- **JWT (JSON Web Tokens)**: Utilizado para autenticação e autorização.
+- **FastAPI**: A modern, fast (high-performance) web framework for building APIs.
+- **SQLAlchemy**: ORM for interacting with the PostgreSQL database.
+- **SQLModel**: ORM and Pydantic for easy model definition and data validation.
+- **PostgreSQL**: Relational database used to store API data.
+- **Alembic**: Database migration tool.
+- **Docker**: Containerization to simplify project execution.
+- **JWT (JSON Web Tokens)**: Used for authentication and authorization.
 
-## Instalação e Configuração
+## Installation and Setup
 
 ### Docker Downloads
 
 - **Docker**: [Download Docker](https://www.docker.com/get-started)
 - **Docker Compose**: [Download Docker Compose](https://docs.docker.com/compose/install/)
 
-### Inicialização do Projeto com Docker
+### Project Initialization with Docker
 
-1. **Construa o projeto**
+1. **Build the project**
 
     ```bash
     docker-compose build
     ```
 
-2. **Inicie o projeto**
+2. **Start the project**
 
     ```bash
     docker-compose up
     ```
 
-    O Docker iniciará os containers para a API e o banco de dados. A API estará disponível em `http://0.0.0.0:8000`.
+    Docker will start the containers for the API and the database. The API will be available at `http://0.0.0.0:8000`.
 
-## Documentação da API
+## API Documentation
 
-A documentação interativa da API está disponível em [Swagger UI](http://0.0.0.0:8000/docs) e pode ser acessada para explorar e testar os endpoints da API.
+Interactive API documentation is available at [Swagger UI](http://0.0.0.0:8000/docs) and can be used to explore and test the API endpoints.
 
-## Exemplos de Uso da API
+## API Usage Examples
 
-### 1. Adicionar um Usuário
+### 1. Add a User
 
-- **Método**: `POST`
-- **Rota**: `/users`
-- **Descrição**: Adiciona um novo usuário. A senha deve ser incluída na requisição e será criptografada antes de ser armazenada.
-- **Exemplo de Request**:
+- **Method**: `POST`
+- **Route**: `/user/register`
+- **Description**: Registers a new user with a username, email, and password. The password will be hashed before being stored.
+- **Request Example**:
 
     ```bash
-    curl -d '{"name":"Thiago Cruz", "email":"thiagoaugustocruz@gmail.com", "password":"strongpassword123"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:8000/users
+    curl -d '{"username":"john_doe", "email":"john@example.com", "password":"strongpassword123"}' -H "Content-Type: application/json" -X POST http://0.0.0.0:8000/user/register
     ```
 
-- **Resposta**:
+- **Response**:
 
     ```json
     {
-        "msg": "User created successfully"
+        "msg": "success"
     }
     ```
 
-### 2. Obter Todos os Usuários
+### 2. Get All Users
 
-- **Método**: `GET`
-- **Rota**: `/users`
-- **Descrição**: Obtém uma lista de todos os usuários registrados.
-- **Exemplo de Request**:
+- **Method**: `GET`
+- **Route**: `/user/`
+- **Description**: Retrieves a list of all registered users.
+- **Request Example**:
 
     ```bash
-    curl -X GET http://0.0.0.0:8000/users
+    curl -X GET http://0.0.0.0:8000/user/
     ```
 
-- **Resposta**:
+- **Response**:
 
     ```json
     [
         {
             "id": 1,
-            "name": "Thiago Cruz",
-            "email": "thiagoaugustocruz@gmail.com"
+            "username": "john_doe",
+            "email": "john@example.com",
+            "imageURL": "https://s3.amazonaws.com/bucketname/imagename.jpg"
         }
     ]
     ```
 
-### 3. Login de Usuário
+### 3. User Login
 
-- **Método**: `POST`
-- **Rota**: `/login`
-- **Descrição**: Autentica um usuário e retorna um token JWT se a autenticação for bem-sucedida.
-- **Exemplo de Request**:
+- **Method**: `POST`
+- **Route**: `/user/login`
+- **Description**: Authenticates a user by providing the username and password. Returns a JWT token if authentication is successful.
+- **Request Example**:
 
     ```bash
-    curl -d 'username=thiagoaugustocruz@gmail.com&password=strongpassword123' -H "Content-Type: application/x-www-form-urlencoded" -X POST http://0.0.0.0:8000/login
+    curl -d 'username=john_doe&password=strongpassword123' -H "Content-Type: application/x-www-form-urlencoded" -X POST http://0.0.0.0:8000/user/login
     ```
 
-- **Resposta**:
+- **Response**:
 
     ```json
     {
-        "access_token": "<TOKEN_JWT>",
+        "access_token": "<JWT_TOKEN>",
         "token_type": "bearer"
     }
     ```
 
-### 4. Atualizar Imagem de Perfil
+### 4. Update User Profile Image
 
-- **Método**: `PUT`
-- **Rota**: `/users/{user_id}/profile-image`
-- **Descrição**: Atualiza a imagem de perfil do usuário especificado.
-- **Exemplo de Request**:
+- **Method**: `PUT`
+- **Route**: `/user/{user_id}/profile-image`
+- **Description**: Updates the profile image of the specified user.
+- **Request Example**:
 
     ```bash
-    curl -F "file=@/path/to/image.jpg" -H "Authorization: Bearer <TOKEN_JWT>" -X PUT http://0.0.0.0:8000/users/1/profile-image
+    curl -F "file=@/path/to/image.jpg" -H "Authorization: Bearer <JWT_TOKEN>" -X PUT http://0.0.0.0:8000/user/1/profile-image
     ```
 
-- **Resposta**:
+- **Response**:
 
     ```json
     {
@@ -124,14 +125,14 @@ A documentação interativa da API está disponível em [Swagger UI](http://0.0.
     }
     ```
 
-## Configuração para AWS
+## AWS Configuration
 
-No futuro, a API será implantada na AWS. Para mais informações sobre a configuração e implantação na AWS, consulte a documentação específica da AWS.
+In the future, the API will be deployed to AWS. For details on AWS configuration and deployment, please refer to AWS-specific documentation.
 
-## Contribuição
+## Contributing
 
-Se você deseja contribuir para este projeto, por favor, faça um fork do repositório e envie um pull request com suas melhorias.
+If you would like to contribute to this project, please fork the repository and submit a pull request with your improvements.
 
-## Licença
+## License
 
-Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
